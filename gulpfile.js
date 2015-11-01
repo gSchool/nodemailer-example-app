@@ -31,18 +31,21 @@ var paths = {
   ],
   distServer: [
     './dist/server/bin/www'
+  ],
+  views: [
+    './src/views/**/*'
   ]
 };
 
 var nodemonConfig = {
   script: paths.server,
-  ext: 'html js css',
+  ext: 'css html jade js',
   ignore: ['node_modules']
 };
 
 var nodemonDistConfig = {
   script: paths.distServer,
-  ext: 'html js css',
+  ext: 'css html jade js',
   ignore: ['node_modules']
 };
 
@@ -103,14 +106,14 @@ gulp.task('minify-js', function() {
     .pipe(gulp.dest('./dist/client/'));
 });
 
-gulp.task('copy-partials', function () {
-  gulp.src('./src/client/partials/*')
-    .pipe(gulp.dest('./dist/client/partials'));
+gulp.task('copy-app', function () {
+  gulp.src('./src/app.js')
+    .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('copy-index', function () {
-  gulp.src('./src/client/index.html')
-    .pipe(gulp.dest('./dist/client/'));
+gulp.task('copy-views', function () {
+  gulp.src('./src/views/**/*')
+    .pipe(gulp.dest('./dist/views'));
 });
 
 gulp.task('copy-server-files', function () {
@@ -144,6 +147,6 @@ gulp.task('build', function() {
   runSequence(
     ['clean'],
     ['lint', 'minify-css', 'minify-js', 'copy-server-files',
-     'copy-partials', 'copy-index', 'connectDist']
+     'copy-app', 'copy-views', 'connectDist']
   );
 });

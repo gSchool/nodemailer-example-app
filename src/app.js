@@ -3,7 +3,7 @@ var express      = require('express');
 var bodyParser   = require('body-parser');
 var cookieParser = require('cookie-parser');
 var favicon      = require('serve-favicon');
-var morgan       = require('morgan');
+var logger       = require('morgan');
 var path         = require('path');
 var passport     = require('passport');
 var session      = require('express-session');
@@ -13,12 +13,17 @@ var session      = require('express-session');
 var app = express();
 
 
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+
 // *** config middleware *** //
-app.use(morgan('dev'));
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(express.static(path.join(__dirname, 'client')));
 
 // *** require for passport *** //
 app.use(session({ secret: 'mysecretsauce' }));
@@ -28,7 +33,7 @@ app.use(passport.session());
 
 
 // *** routes *** //
-var routes = require('./routes/index.js');
+var routes = require('./server/routes/index');
 
 
 // *** main routes *** //
