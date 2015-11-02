@@ -1,9 +1,14 @@
-var myApp = angular.module('myApp', ['ngRoute']);
+var App = angular.module('App', ['AuthRoutes', 'ngRoute']);
 
-myApp.config(['$routeProvider', function ($routeProvider) {
+App.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
     .when('/', {
-      templateUrl: 'partials/home'
+      templateUrl: 'partials/home',
+      resolve: {
+        getUser: ['AuthService', function(AuthService) {
+          return AuthService.getUser();
+        }]
+      }
     })
     .otherwise({redirectTo: '/'});
 }]);

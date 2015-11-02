@@ -4,6 +4,7 @@ var bodyParser   = require('body-parser');
 var cookieParser = require('cookie-parser');
 var favicon      = require('serve-favicon');
 var logger       = require('morgan');
+var mongoose     = require('mongoose');
 var path         = require('path');
 var passport     = require('passport');
 var session      = require('express-session');
@@ -25,11 +26,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'client')));
 
+
+// *** mongoose *** ///
+var dbConfig = require('./server/config/database');
+mongoose.connect(dbConfig.url);
+
+
 // *** require for passport *** //
 app.use(session({ secret: 'mysecretsauce' }));
 app.use(passport.initialize());
 app.use(passport.session());
-// require('./config/passport');
+require('./server/config/passport');
 
 
 // *** routes *** //
