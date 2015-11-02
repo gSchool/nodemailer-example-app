@@ -2,17 +2,18 @@
  * Module Dependencies
  */
 
-var gulp = require('gulp');
-var jshint = require('gulp-jshint');
+var gulp        = require('gulp');
+var jshint      = require('gulp-jshint');
 var browserSync = require('browser-sync');
-var reload = browserSync.reload;
-var nodemon = require('gulp-nodemon');
-var connect = require('gulp-connect');
-var uglify = require('gulp-uglify');
-var minifyCSS = require('gulp-minify-css');
-var clean = require('gulp-clean');
-var concat = require('gulp-concat');
+var reload      = browserSync.reload;
+var nodemon     = require('gulp-nodemon');
+var connect     = require('gulp-connect');
+var uglify      = require('gulp-uglify');
+var minifyCSS   = require('gulp-minify-css');
+var clean       = require('gulp-clean');
+var concat      = require('gulp-concat');
 var runSequence = require('run-sequence');
+var ngmin       = require('gulp-ngmin');
 
 
 /**
@@ -22,6 +23,10 @@ var runSequence = require('run-sequence');
 var paths = {
   styles: [
     './src/client/public/css/*.css',
+  ],
+  angularScripts: [
+    './src/client/main.js',
+    './src/client/**/*.js'
   ],
   scripts: [
     './src/client/*.js',
@@ -106,6 +111,13 @@ gulp.task('minify-js', function() {
     .pipe(gulp.dest('./dist/client/'));
 });
 
+gulp.task('minify-angular', function () {
+  gulp.src(paths.angularScripts)
+      .pipe(ngmin())
+      .pipe(uglify())
+      .pipe(gulp.dest('./dist/client/'));
+});
+
 gulp.task('copy-app', function () {
   gulp.src('./src/app.js')
     .pipe(gulp.dest('./dist'));
@@ -146,7 +158,8 @@ gulp.task('default', ['browser-sync', 'watch']);
 gulp.task('build', function() {
   runSequence(
     ['clean'],
-    ['lint', 'minify-css', 'minify-js', 'copy-server-files',
-     'copy-app', 'copy-views', 'connectDist']
+    ['lint', 'minify-css', 'minify-js', 'minify-angular', 'copy-server-files',
+     'copy-app', 'copy-views'],
+    ['connectDist']
   );
 });
