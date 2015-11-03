@@ -14,7 +14,7 @@ var session      = require('express-session');
 var app = express();
 
 
-// view engine setup
+// *** view engine setup *** //
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -79,5 +79,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
+// set up environment variables for app use
+process.env.NODE_ENV = process.env.NODE_ENV || app.get('env');
 
 module.exports = app;
