@@ -1,4 +1,4 @@
-App.controller('AuthController', function ($location, $rootScope, $scope, HTTPService) {
+App.controller('AuthController', ['$location', '$rootScope', '$scope', 'HTTPService', function ($location, $rootScope, $scope, HTTPService) {
   $scope.user = {};
 
   $scope.login = function () {
@@ -18,4 +18,4 @@ App.controller('AuthController', function ($location, $rootScope, $scope, HTTPSe
       } else { $scope.message = response.data.message };
     });
   };
-});
+}]);
