@@ -1,6 +1,7 @@
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 var User     = require('../models/user');
+var mailer   = require('../mailers/auth');
 
 // serialization functions
 passport.serializeUser(function (user, done) {
@@ -35,6 +36,7 @@ var signupUser = function (req, email, password, done) {
     newUser.save(function (err) {
       if ( err ) { throw err; }
 
+      mailer.sendSignupEmail(email);
       return done(null, newUser);
     });
   });
