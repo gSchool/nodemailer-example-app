@@ -79,8 +79,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
-// set up environment variables for app use
-process.env.NODE_ENV = process.env.NODE_ENV || app.get('env');
+process.env.NODE_ENV = process.env.NODE_ENV || app.get('env') || 'development';
 
 module.exports = app;
