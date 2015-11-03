@@ -41,8 +41,4 @@ var Mailer = function () {
   }
 }
 
-var mailer = new Mailer();
-mailer.sendMail({ to:             'wesley.reid@galvanize.com',
-                  from:           'wesley.reid@galvanize.com',
-                  subject:        'Oh, hey girl!',
-                  htmlContent:    '<h1>Wow.</h1><p>Such message. Very email.</p>'});
+module.exports = new Mailer();
