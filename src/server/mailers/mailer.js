@@ -1,7 +1,9 @@
+var _             = require('underscore-node');
 var nodemailer    = require('nodemailer');
 var sesConfig     = require('../config/amazon-ses');
 var sesTransport  = require('nodemailer-ses-transport');
 var stubTransport = require('nodemailer-stub-transport');
+var htmlToText    = require('nodemailer-html-to-text').htmlToText;
 
 var Mailer = function () {
   this.options = {
@@ -11,6 +13,14 @@ var Mailer = function () {
     region: 'us-west-2'
   };
 
+  this.createTransporter = function (options) {
+    if ( process.env.NODE_ENV === 'development' )
+      return nodemailer.createTransport(stubTransport());
+    else
+      var opt = ( options ) ? _.extend(options, this.options) : this.options;
+      return nodemailer.createTransport(sesTransport(opt));
+  };
+
   this.logMessages = function (err, info) {
     var message = ( info.response ) ? info.response.toString() : info;
     var resp = err || message;
@@ -18,7 +28,8 @@ var Mailer = function () {
   }
 
   this.sendMail = function (messageOptions) {
-    var transporter = nodemailer.createTransport(sesTransport(this.options));
+    var transporter = this.createTransporter();
+    transporter.use('compile', htmlToText(messageOptions));
 
     transporter.sendMail({
       from:    messageOptions.from,
@@ -31,7 +42,7 @@ var Mailer = function () {
 }
 
 var mailer = new Mailer();
-mailer.sendMail({ to:      'wesley.reid@galvanize.com',
-                  from:    'wesley.reid@galvanize.com',
-                  subject: 'Oh hey girl',
-                  textContent:    'Wow. Such message. Very email.'});
+mailer.sendMail({ to:             'wesley.reid@galvanize.com',
+                  from:           'wesley.reid@galvanize.com',
+                  subject:        'Oh, hey girl!',
+                  htmlContent:    '<h1>Wow.</h1><p>Such message. Very email.</p>'});
