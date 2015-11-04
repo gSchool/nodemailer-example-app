@@ -1,3 +1,4 @@
+var fs     = require('fs');
 var mailer = require('./mailer');
 
 var sendSignupEmail = function (toAddress) {
@@ -5,7 +6,7 @@ var sendSignupEmail = function (toAddress) {
     to: toAddress,
     from: 'Wes Reid <wesley.reid@galvanize.com>',
     subject: 'Thank you for signing up!',
-    htmlContent: '<h1>Hurray!</h1><p>You\'re sending emails.</p>'
+    htmlContent: fs.readFileSync('./src/views/emails/auth/signup.html', encoding="utf8")
   };
 
   mailer.sendMail(messageOptions);

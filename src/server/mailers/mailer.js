@@ -22,7 +22,7 @@ var Mailer = function () {
   };
 
   this.logMessages = function (err, info) {
-    var message = ( info.response ) ? info.response.toString() : info;
+    var message = ( info && info.response ) ? info.response.toString() : info;
     var resp = err || message;
     console.log(resp);
   }
