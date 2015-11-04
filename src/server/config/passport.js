@@ -36,7 +36,7 @@ var signupUser = function (req, email, password, done) {
     newUser.save(function (err) {
       if ( err ) { throw err; }
 
-      mailer.sendSignupEmail(email);
+      mailer.sendSignupEmail(email, { email: email });
       return done(null, newUser);
     });
   });

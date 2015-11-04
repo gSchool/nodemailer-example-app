@@ -1,16 +1,19 @@
-var fs     = require('fs');
 var mailer = require('./mailer');
 
-var sendSignupEmail = function (toAddress) {
-  var messageOptions = { 
-    to: toAddress,
-    from: 'Wes Reid <wesley.reid@galvanize.com>',
-    subject: 'Thank you for signing up!',
-    htmlContent: fs.readFileSync('./src/views/emails/auth/signup.html', encoding="utf8")
-  };
+var sendSignupEmail = function (toAddress, locals) {  
+  var options = {
+    messageDetails: {
+      to: toAddress,
+      from: 'Wes Reid <wesley.reid@galvanize.com>',
+      subject: 'Thank you for signing up!'  
+    },
+    template: './src/views/emails/auth/signup.jade',
+    locals: locals
+  }
 
-  mailer.sendMail(messageOptions);
-}
+  mailer.sendMail(options);
+};
+
 
 var authMailer = {
   sendSignupEmail: sendSignupEmail
